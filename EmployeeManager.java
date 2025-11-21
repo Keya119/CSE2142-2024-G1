@@ -17,23 +17,38 @@ public class EmployeeManager {
         fileWriter.close();
     }
     
-    // Task #7: New method for search operation without control-flow variable
     private static void searchEmployee(String employeeName) {
         System.out.println(Constants.LOADING_DATA_MSG);
         try {
             String[] employees = readEmployeesFromFile();
             
-            // Task #7: Eliminated 'employeeFound' control-flow variable
             for (String employee : employees) {
                 if (employee.equals(employeeName)) {
                     System.out.println(Constants.EMPLOYEE_FOUND_MSG);
                     System.out.println(Constants.DATA_LOADED_MSG);
-                    return; // Task #7: Early return instead of control variable
+                    return;
                 }
             }
             
-            // Task #7: Better response when employee not found
             System.out.println("Employee '" + employeeName + "' not found!");
+            
+        } catch (Exception error) {
+            System.out.println("Error reading file: " + error.getMessage());
+        }
+        System.out.println(Constants.DATA_LOADED_MSG);
+    }
+    
+    // Task #8: New method for simplified count operation
+    private static void countEmployeesAndCharacters() {
+        System.out.println(Constants.LOADING_DATA_MSG);
+        try {
+            String[] employees = readEmployeesFromFile();
+            
+            // Task #8: Simplified logic - just count array length for employees
+            int employeeCount = employees.length;
+            int totalCharacters = String.join(Constants.COMMA_DELIMITER, employees).length();
+            
+            System.out.println(employeeCount + Constants.WORDS_FOUND_MSG + totalCharacters);
             
         } catch (Exception error) {
             System.out.println("Error reading file: " + error.getMessage());
@@ -80,18 +95,10 @@ public class EmployeeManager {
             }
             System.out.println(Constants.DATA_LOADED_MSG);
         } else if (args[0].contains("?")) {
-            // Task #7: Using the improved search method
             searchEmployee(args[0].substring(1));
         } else if (args[0].contains("c")) {
-            System.out.println(Constants.LOADING_DATA_MSG);
-            try {
-                String[] employees = readEmployeesFromFile();
-                int totalCharacters = String.join(Constants.COMMA_DELIMITER, employees).length();
-                System.out.println(employees.length + Constants.WORDS_FOUND_MSG + totalCharacters);
-            } catch (Exception error) {
-                System.out.println("Error reading file: " + error.getMessage());
-            }
-            System.out.println(Constants.DATA_LOADED_MSG);
+            // Task #8: Using simplified count method
+            countEmployeesAndCharacters();
         } else if (args[0].contains("u")) {
             System.out.println(Constants.LOADING_DATA_MSG);
             try {
