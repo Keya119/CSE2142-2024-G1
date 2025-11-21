@@ -3,19 +3,19 @@ import java.util.*;
 
 public class EmployeeManager {
     
-    // Task #4: Refactor duplicate file read logic into method
+    // Task #4: Refactored file read method with Constants
     private static String[] readEmployeesFromFile() throws IOException {
         BufferedReader fileReader = new BufferedReader(
-            new InputStreamReader(new FileInputStream("employees.txt")));
+            new InputStreamReader(new FileInputStream(Constants.FILE_NAME)));
         String fileLine = fileReader.readLine();
         fileReader.close();
-        return fileLine.split(",");
+        return fileLine.split(Constants.COMMA_DELIMITER);
     }
     
-    // Task #4: Refactor duplicate file write logic into method
+    // Task #4: Refactored file write method with Constants
     private static void writeEmployeesToFile(String[] employees) throws IOException {
-        BufferedWriter fileWriter = new BufferedWriter(new FileWriter("employees.txt"));
-        fileWriter.write(String.join(",", employees));
+        BufferedWriter fileWriter = new BufferedWriter(new FileWriter(Constants.FILE_NAME));
+        fileWriter.write(String.join(Constants.COMMA_DELIMITER, employees));
         fileWriter.close();
     }
     
@@ -31,9 +31,9 @@ public class EmployeeManager {
         String userArgument = args[0];
         
         if (userArgument.equals("1")) {
-            System.out.println("Loading data ...");
+            // Task #5: Using constants for messages
+            System.out.println(Constants.LOADING_DATA_MSG);
             try {
-                // Task #4: Using refactored method instead of duplicate code
                 String[] employees = readEmployeesFromFile();
                 for (String employee : employees) {
                     System.out.println(employee);
@@ -41,11 +41,11 @@ public class EmployeeManager {
             } catch (Exception error) {
                 System.out.println("Error reading file: " + error.getMessage());
             }
-            System.out.println("Data Loaded.");
+            System.out.println(Constants.DATA_LOADED_MSG);
         } else if (userArgument.equals("s")) {
-            System.out.println("Loading data ...");
+            // Task #5: Using constants for messages
+            System.out.println(Constants.LOADING_DATA_MSG);
             try {
-                // Task #4: Using refactored method
                 String[] employees = readEmployeesFromFile();
                 Random randomGenerator = new Random();
                 int randomIndex = randomGenerator.nextInt(employees.length);
@@ -53,44 +53,44 @@ public class EmployeeManager {
             } catch (Exception error) {
                 System.out.println("Error reading file: " + error.getMessage());
             }
-            System.out.println("Data Loaded.");
+            System.out.println(Constants.DATA_LOADED_MSG);
         } else if (userArgument.contains("+")) {
-            System.out.println("Loading data ...");
+            // Task #5: Using constants for messages and file operations
+            System.out.println(Constants.LOADING_DATA_MSG);
             try {
-                // Task #4: For append operation, still using direct write
                 BufferedWriter fileWriter = new BufferedWriter(
-                    new FileWriter("employees.txt", true));
+                    new FileWriter(Constants.FILE_NAME, true));
                 String newEmployeeName = userArgument.substring(1);
-                fileWriter.write("," + newEmployeeName);
+                fileWriter.write(Constants.COMMA_DELIMITER + newEmployeeName);
                 fileWriter.close();
             } catch (Exception error) {
                 System.out.println("Error writing to file: " + error.getMessage());
             }
-            System.out.println("Data Loaded.");
+            System.out.println(Constants.DATA_LOADED_MSG);
         } else if (userArgument.contains("?")) {
-            System.out.println("Loading data ...");
+            // Task #5: Using constants for messages
+            System.out.println(Constants.LOADING_DATA_MSG);
             try {
-                // Task #4: Using refactored method
                 String[] employees = readEmployeesFromFile();
                 boolean employeeFound = false;
                 String searchName = userArgument.substring(1);
                 
                 for (int i = 0; i < employees.length && !employeeFound; i++) {
                     if (employees[i].equals(searchName)) {
-                        System.out.println("Employee found!");
+                        System.out.println(Constants.EMPLOYEE_FOUND_MSG);
                         employeeFound = true;
                     }
                 }
             } catch (Exception error) {
                 System.out.println("Error reading file: " + error.getMessage());
             }
-            System.out.println("Data Loaded.");
+            System.out.println(Constants.DATA_LOADED_MSG);
         } else if (userArgument.contains("c")) {
-            System.out.println("Loading data ...");
+            // Task #5: Using constants for messages
+            System.out.println(Constants.LOADING_DATA_MSG);
             try {
-                // Task #4: Using refactored method
                 String[] employees = readEmployeesFromFile();
-                char[] characterArray = String.join(",", employees).toCharArray();
+                char[] characterArray = String.join(Constants.COMMA_DELIMITER, employees).toCharArray();
                 boolean inWord = false;
                 int wordCount = 0;
                 
@@ -105,21 +105,21 @@ public class EmployeeManager {
                     }
                 }
                 
-                System.out.println(wordCount + " word(s) found " + characterArray.length);
+                System.out.println(wordCount + Constants.WORDS_FOUND_MSG + characterArray.length);
             } catch (Exception error) {
                 System.out.println("Error reading file: " + error.getMessage());
             }
-            System.out.println("Data Loaded.");
+            System.out.println(Constants.DATA_LOADED_MSG);
         } else if (userArgument.contains("u")) {
-            System.out.println("Loading data ...");
+            // Task #5: Using constants for messages and update flag
+            System.out.println(Constants.LOADING_DATA_MSG);
             try {
-                // Task #4: Using refactored methods
                 String[] employees = readEmployeesFromFile();
                 String employeeToUpdate = userArgument.substring(1);
                 
                 for (int i = 0; i < employees.length; i++) {
                     if (employees[i].equals(employeeToUpdate)) {
-                        employees[i] = "Updated";
+                        employees[i] = Constants.UPDATED_FLAG;
                     }
                 }
                 
@@ -127,11 +127,11 @@ public class EmployeeManager {
             } catch (Exception error) {
                 System.out.println("Error updating file: " + error.getMessage());
             }
-            System.out.println("Data Updated.");
+            System.out.println(Constants.DATA_UPDATED_MSG);
         } else if (userArgument.contains("d")) {
-            System.out.println("Loading data ...");
+            // Task #5: Using constants for messages
+            System.out.println(Constants.LOADING_DATA_MSG);
             try {
-                // Task #4: Using refactored methods
                 String[] employees = readEmployeesFromFile();
                 String employeeToDelete = userArgument.substring(1);
                 List<String> employeeList = new ArrayList<>(Arrays.asList(employees));
@@ -141,7 +141,18 @@ public class EmployeeManager {
             } catch (Exception error) {
                 System.out.println("Error deleting from file: " + error.getMessage());
             }
-            System.out.println("Data Deleted.");
+            System.out.println(Constants.DATA_DELETED_MSG);
         }
     }
+}// Task #5: New Constants class for storing string literals
+public class Constants {
+    public static final String FILE_NAME = "employees.txt";
+    public static final String DATA_LOADED_MSG = "Data Loaded.";
+    public static final String LOADING_DATA_MSG = "Loading data ...";
+    public static final String EMPLOYEE_FOUND_MSG = "Employee found!";
+    public static final String DATA_UPDATED_MSG = "Data Updated.";
+    public static final String DATA_DELETED_MSG = "Data Deleted.";
+    public static final String WORDS_FOUND_MSG = " word(s) found ";
+    public static final String COMMA_DELIMITER = ",";
+    public static final String UPDATED_FLAG = "Updated";
 }
