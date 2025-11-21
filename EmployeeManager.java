@@ -38,13 +38,11 @@ public class EmployeeManager {
         System.out.println(Constants.DATA_LOADED_MSG);
     }
     
-    // Task #8: New method for simplified count operation
     private static void countEmployeesAndCharacters() {
         System.out.println(Constants.LOADING_DATA_MSG);
         try {
             String[] employees = readEmployeesFromFile();
             
-            // Task #8: Simplified logic - just count array length for employees
             int employeeCount = employees.length;
             int totalCharacters = String.join(Constants.COMMA_DELIMITER, employees).length();
             
@@ -56,6 +54,19 @@ public class EmployeeManager {
         System.out.println(Constants.DATA_LOADED_MSG);
     }
     
+    // Task #9: New method for handling invalid arguments
+    private static void handleInvalidArgument(String invalidArgument) {
+        System.out.println("Error: Invalid argument '" + invalidArgument + "'");
+        System.out.println("Valid arguments:");
+        System.out.println("  1           - Display all employees");
+        System.out.println("  s           - Show random employee");
+        System.out.println("  +<name>     - Add new employee");
+        System.out.println("  ?<name>     - Search employee");
+        System.out.println("  c           - Count employees and characters");
+        System.out.println("  u<name>     - Update employee");
+        System.out.println("  d<name>     - Delete employee");
+    }
+    
     public static void main(String[] args) {
         if (args.length != 1) {
             System.out.println("Usage: java EmployeeManager <argument>");
@@ -63,7 +74,10 @@ public class EmployeeManager {
             return;
         }
         
-        if (args[0].equals("1")) {
+        // Task #9: Comprehensive argument validation
+        String userArgument = args[0];
+        
+        if (userArgument.equals("1")) {
             System.out.println(Constants.LOADING_DATA_MSG);
             try {
                 String[] employees = readEmployeesFromFile();
@@ -74,7 +88,7 @@ public class EmployeeManager {
                 System.out.println("Error reading file: " + error.getMessage());
             }
             System.out.println(Constants.DATA_LOADED_MSG);
-        } else if (args[0].equals("s")) {
+        } else if (userArgument.equals("s")) {
             System.out.println(Constants.LOADING_DATA_MSG);
             try {
                 String[] employees = readEmployeesFromFile();
@@ -83,27 +97,26 @@ public class EmployeeManager {
                 System.out.println("Error reading file: " + error.getMessage());
             }
             System.out.println(Constants.DATA_LOADED_MSG);
-        } else if (args[0].contains("+")) {
+        } else if (userArgument.startsWith("+") && userArgument.length() > 1) {
             System.out.println(Constants.LOADING_DATA_MSG);
             try {
                 BufferedWriter fileWriter = new BufferedWriter(
                     new FileWriter(Constants.FILE_NAME, true));
-                fileWriter.write(Constants.COMMA_DELIMITER + args[0].substring(1));
+                fileWriter.write(Constants.COMMA_DELIMITER + userArgument.substring(1));
                 fileWriter.close();
             } catch (Exception error) {
                 System.out.println("Error writing to file: " + error.getMessage());
             }
             System.out.println(Constants.DATA_LOADED_MSG);
-        } else if (args[0].contains("?")) {
-            searchEmployee(args[0].substring(1));
-        } else if (args[0].contains("c")) {
-            // Task #8: Using simplified count method
+        } else if (userArgument.startsWith("?") && userArgument.length() > 1) {
+            searchEmployee(userArgument.substring(1));
+        } else if (userArgument.equals("c")) {
             countEmployeesAndCharacters();
-        } else if (args[0].contains("u")) {
+        } else if (userArgument.startsWith("u") && userArgument.length() > 1) {
             System.out.println(Constants.LOADING_DATA_MSG);
             try {
                 String[] employees = readEmployeesFromFile();
-                String employeeToUpdate = args[0].substring(1);
+                String employeeToUpdate = userArgument.substring(1);
                 
                 for (int i = 0; i < employees.length; i++) {
                     if (employees[i].equals(employeeToUpdate)) {
@@ -116,11 +129,11 @@ public class EmployeeManager {
                 System.out.println("Error updating file: " + error.getMessage());
             }
             System.out.println(Constants.DATA_UPDATED_MSG);
-        } else if (args[0].contains("d")) {
+        } else if (userArgument.startsWith("d") && userArgument.length() > 1) {
             System.out.println(Constants.LOADING_DATA_MSG);
             try {
                 String[] employees = readEmployeesFromFile();
-                String employeeToDelete = args[0].substring(1);
+                String employeeToDelete = userArgument.substring(1);
                 List<String> employeeList = new ArrayList<>(Arrays.asList(employees));
                 employeeList.remove(employeeToDelete);
                 
@@ -129,6 +142,9 @@ public class EmployeeManager {
                 System.out.println("Error deleting from file: " + error.getMessage());
             }
             System.out.println(Constants.DATA_DELETED_MSG);
+        } else {
+            // Task #9: Handle invalid arguments
+            handleInvalidArgument(userArgument);
         }
     }
 }
